@@ -12,7 +12,7 @@ const produkSchema = new mongoose.Schema({
   garansi: { type: String, required: [true, 'garansi wajib diisi'], trim: true },
   
   spesifikasi: spesifikasiSchema,
-  kategoriId: { type: mongoose.Schema.Types.ObjectId, ref: 'Kategori' },
+  kategoriProdukId: { type: mongoose.Schema.Types.ObjectId, ref: 'Kategori' },
   createdAt: { type: Date, default: Date.now },
 });
 

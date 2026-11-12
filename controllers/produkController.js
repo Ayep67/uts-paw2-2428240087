@@ -31,7 +31,7 @@ exports.getAll = async (req, res) => {
   if (req.query.kategori) {
     const kategori = await Kategori.findOne({ kode: String(req.query.kategori).toUpperCase() });
     // Kode kategori tidak dikenal -> hasil kosong ($in: [] tidak cocok dengan apa pun)
-    filter.kategoriId = kategori ? kategori._id : { $in: [] };
+    filter.kategoriProdukId = kategori ? kategori._id : { $in: [] };
   }
 
   const page = angkaAman(req.query.page, 1, 1, Number.MAX_SAFE_INTEGER);
@@ -63,8 +63,8 @@ exports.getAll = async (req, res) => {
 
   // populate() otomatis menambahkan kategori ke hasil, jadi hanya dipanggil
   // bila kategori memang diminta (atau bila tidak ada pemilihan field)
-  if (!select || select.split(' ').includes('kategoriId')) {
-    query.populate('kategoriId', 'kode nama');
+  if (!select || select.split(' ').includes('kategoriProdukId')) {
+    query.populate('kategoriProdukId', 'kode nama');
   }
 
   const [data, total] = await Promise.all([query, Produk.countDocuments(filter)]);
@@ -73,7 +73,7 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getById = async (req, res) => {
-  const data = await Produk.findById(req.params.id).populate('kategoriId');
+  const data = await Produk.findById(req.params.id).populate('kategoriProdukId');
   if (!data) throw errorHttp(404, 'Data tidak ditemukan');
   res.json(data);
 };
